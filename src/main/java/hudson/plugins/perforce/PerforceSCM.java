@@ -424,6 +424,7 @@ public class PerforceSCM extends SCM {
             depot.setPort(p4Port);
             depot.setPassword(getDecryptedP4Passwd());
         }
+        LOGGER.log(Level.INFO, "depot.user={0}", depot.getUser());
 
         if (p4Ticket != null && !p4Ticket.equals(""))
             depot.setP4Ticket(p4Ticket);
