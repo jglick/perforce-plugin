@@ -1243,9 +1243,7 @@ public class PerforceSCM extends SCM {
             return new PollingResult(baseline, repositoryState, change);
 
         } catch (PerforceException e) {
-            System.out.println("Problem: " + e.getMessage());
-            logger.println("Caught Exception communicating with perforce." + e.getMessage());
-            throw new IOException("Unable to communicate with perforce.  Check log file for: " + e.getMessage());
+            throw new IOException("Unable to communicate with perforce: " + e, e);
         }
     }
 
