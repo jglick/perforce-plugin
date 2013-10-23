@@ -5,14 +5,16 @@ import java.util.Map;
 import java.util.Set;
 
 import com.tek42.perforce.PerforceException;
-import com.tek42.perforce.process.Executor;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.Proc;
 import hudson.model.Hudson;
 import hudson.remoting.FastPipedInputStream;
 import hudson.remoting.FastPipedOutputStream;
-import hudson.util.StreamTaskListener;
+import hudson.util.LogTaskListener;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implementation of the P4Java Executor interface that provides support for
@@ -65,7 +67,7 @@ public class HudsonP4DefaultExecutor implements HudsonP4Executor {
         try {
 			// ensure we actually have a valid hudson launcher
 			if (null == hudsonLauncher) {
-				hudsonLauncher = Hudson.getInstance().createLauncher(new StreamTaskListener(System.out));
+				hudsonLauncher = Hudson.getInstance().createLauncher(new LogTaskListener(Logger.getLogger(HudsonP4DefaultExecutor.class.getName()), Level.FINE));
 			}
 
             // hudsonOut->p4in->reader
@@ -87,7 +89,7 @@ public class HudsonP4DefaultExecutor implements HudsonP4Executor {
             //try to close all the pipes before throwing an exception
             closeBuffers();
             
-            throw new PerforceException("Could not run perforce command.", e);
+            throw new PerforceException("Could not run " + Arrays.asList(cmd) + " in " + filePath + " using " + Arrays.asList(env), e);
         }
     }
 
